@@ -24,5 +24,4 @@ app.MapControllers();
 
 app.Run();
 
-```csharp
 // Prueba final de pipeline automatico - Edwin
