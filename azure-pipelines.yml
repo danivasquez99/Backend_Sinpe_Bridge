@@ -21,9 +21,14 @@ steps:
     projects: '**/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
-- script: |
-    dotnet publish **/*.csproj --configuration Release --output "$(Build.ArtifactStagingDirectory)"
+- task: DotNetCoreCLI@2
   displayName: 'Generar archivos ejecutables (Publish)'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: false
 
 - task: PublishBuildArtifacts@1
   displayName: 'Subir artefacto a la nube de Azure'
