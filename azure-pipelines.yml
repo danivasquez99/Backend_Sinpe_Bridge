@@ -1,40 +1,9 @@
-trigger:
-- main  # Asegúrate de verificar si tu rama principal se llama 'main' o 'master'
-
-# CLAVE: Usa el agente que dejamos Online en tu computadora
-pool:
-  name: 'Default'
-
-variables:
-  buildConfiguration: 'Release'
-
-steps:
-# 1. Restaurar las dependencias y paquetes NuGet del proyecto
-- task: DotNetCoreCLI@2
-  displayName: 'Restaurar paquetes NuGet (.NET)'
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
-
-# 2. Compilar el Backend en modo Release usando las herramientas de tu compu
-- task: DotNetCoreCLI@2
-  displayName: 'Compilar Backend (Build)'
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
-
-# 3. Publicar/Empaquetar los archivos listos para ejecutar (el Build/Publish)
-- task: DotNetCoreCLI@2
+# 3. Publicar/Empaquetar los archivos usando un comando de script nativo más directo
+- script: |
+    dotnet publish **/*.csproj --configuration Release --output "$(Build.ArtifactStagingDirectory)"
   displayName: 'Generar archivos ejecutables (Publish)'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: true
 
-# 4. Subir el archivo empaquetado (el artefacto final) a la nube de Azure
+# 4. Subir el archivo empaquetado a la nube de Azure
 - task: PublishBuildArtifacts@1
   displayName: 'Subir artefacto a la nube de Azure'
   inputs:
