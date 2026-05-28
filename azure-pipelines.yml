@@ -1,9 +1,30 @@
-# 3. Publicar/Empaquetar los archivos usando un comando de script nativo más directo
+trigger:
+- main
+
+pool:
+  name: 'Default'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurar paquetes NuGet (.NET)'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Compilar Backend (Build)'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
 - script: |
     dotnet publish **/*.csproj --configuration Release --output "$(Build.ArtifactStagingDirectory)"
   displayName: 'Generar archivos ejecutables (Publish)'
 
-# 4. Subir el archivo empaquetado a la nube de Azure
 - task: PublishBuildArtifacts@1
   displayName: 'Subir artefacto a la nube de Azure'
   inputs:
