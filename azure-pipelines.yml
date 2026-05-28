@@ -1,7 +1,7 @@
 trigger:
-- main  # Se ejecutará solo cuando hagas push a la rama 'main' (cámbialo si usas master o dev)
+- main  # Asegúrate de verificar si tu rama principal se llama 'main' o 'master'
 
-# CLAVE: Obliga a Azure a usar tu máquina en lugar de sus servidores
+# CLAVE: Usa el agente que dejamos Online en tu computadora
 pool:
   name: 'Default'
 
